@@ -1,0 +1,22 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+.center {
+    text-align: center;
+}
+
+input {
+    width: 40%;
+    min-width: 250px;
+}
+
+button {
+    width: 40%;
+    min-width: 250px;
+}
+
+a {
+    color: chartreuse;
+}

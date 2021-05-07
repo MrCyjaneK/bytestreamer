@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteStreamer</title>
+    <script src="/scripts/pte.js"></script>
+    <link href="/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="center">
+        <h1>ByteStreamer</h1>
+        <p style="color: red;" id="error"></p>
+        <form target="#">
+            <input id="username" type="text" placeholder="Email"><br />
+            <input id="password" type="password" placeholder="Password"><br />
+            <input id="apikey" type="password" placeholder="Api Key"><br />
+            <button onclick="pteLogin(); return false">Login</button>
+        </form>
+        <script>
+            document.getElementById("username").value = localStorage.username
+            document.getElementById("password").value = localStorage.password
+            document.getElementById("apikey").value = localStorage.apikey
+        </script>
+    </div>
+</body>
+</html>
