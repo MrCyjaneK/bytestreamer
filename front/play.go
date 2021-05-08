@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"time"
 
+	"git.mrcyjanek.net/mrcyjanek/goprod/goprod"
 	"github.com/anacrolix/torrent"
 )
 
@@ -25,10 +26,23 @@ type FileEntry struct {
 
 func apiPlay(w http.ResponseWriter, req *http.Request) {
 	if runtime.GOOS == "android" {
-		w.Header().Add("Content-Type", "application/xspf+xml")
-	} else {
-		w.Header().Add("Content-Type", "application/vnd.apple.mpegurl")
+		w.Header().Add("Content-Type", "text/html")
+		w.Write([]byte(`<script>
+		
+<script>
+	window.location.href = "/player.html"
+</script>`))
+		var intent goprod.Intent
+		intent.Type = "android-intent"
+		intent.Data.Package = "org.videolan.vlc"
+		intent.Data.URI = `http://127.0.0.1:8081/streamfile?torrentid=` + url.QueryEscape(req.URL.Query().Get("torrentid")) + `&file=` + url.QueryEscape(req.URL.Query().Get("file"))
+		intent.Data.CustomComponent = true
+		intent.Data.Component.PKG = intent.Data.Package
+		intent.Data.Component.CLS = "org.videolan.vlc.gui.video.VideoPlayerActivity"
+		goprod.CallIntent(intent)
+		return
 	}
+	w.Header().Add("Content-Type", "application/vnd.apple.mpegurl")
 	w.Header().Add("Content-Disposition", `filename=`+url.QueryEscape(req.URL.Query().Get("file"))+`.m3u8`)
 	w.Write([]byte(`#EXTM3U
 #EXTINF:-1,LiveStream
