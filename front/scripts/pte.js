@@ -88,7 +88,7 @@ function loadInfoPte() {
         for (i in r.Files) {
             let li = document.createElement('li')
             let a = document.createElement('a')
-            a.target = "_blank"
+            //a.target = "_blank"
             a.href = "/play?torrentid="+encodeURIComponent(id)+"&file="+encodeURIComponent(r.Files[i].Path.join("/"))
             a.innerText = r.Files[i].Path[r.Files[i].Path.length-1]
             li.appendChild(a)

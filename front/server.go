@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/anacrolix/torrent"
 )
@@ -37,5 +39,14 @@ func Start() {
 	http.HandleFunc("/api/info/pte", apiInfoPte)
 	http.HandleFunc("/api/torrent_info", apiTorrentInfo)
 	http.HandleFunc("/streamfile", streamfile)
-	http.ListenAndServe(":8081", nil)
+	go http.ListenAndServe(":8081", nil)
+	log.Println("[gui] Please stop me after closing app.")
+	cancelChan := make(chan os.Signal, 1)
+	signal.Notify(cancelChan, syscall.SIGTERM, syscall.SIGINT)
+	sig := <-cancelChan
+	log.Printf("[gui] Caught SIGTERM %v, exiting", sig)
+	torrents := cl.Torrents()
+	for i := range torrents {
+		torrents[i].Drop()
+	}
 }
